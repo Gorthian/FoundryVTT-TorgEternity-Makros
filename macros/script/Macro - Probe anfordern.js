@@ -1,6 +1,5 @@
 /*
 	Autor		    : Gorthian
-	Voraussetzung	: Modul "Requestor" von Zhell
 */
 
 new Dialog({
@@ -108,22 +107,26 @@ new Dialog({
 		        var difficulty = document.getElementById('difficulty');
 		        var difficulty_value = difficulty.value;
 		        var difficulty_text = difficulty.options[difficulty.selectedIndex].text;
-		        Requestor.request({
-			        img:"icons/svg/d20.svg",
-			        title:"Probe angefordert",
-			        description: skill_text+" ("+attribute_text+") <br/> Schwierigkeit: "+difficulty_text,
-			        buttonData: [{
-				        scope: {
-					        skill: skill_value,
-					        attribute: attribute_value,
-					        difficulty: difficulty_value
-				        },
-				        label: "Probe ausführen",
-                        command: async function(){
-                            return game.torgeternity.rollSkillMacro(skill, attribute, false, difficulty);
-                        }
-  			        }]
-		        });
+                var timestamp = Date.now();
+
+                messageContent=`
+                    <div>
+                        <p><h1>Probe anfordern</h1></p>
+                        <p>Fertigkeit: `+skill_text+` (`+attribute_text+`) 
+                        <br/> Schwierigkeit: `+difficulty_text+`</p>
+                        <div class="buttons">
+                            <button class="gorthian-inbound-roll-`+timestamp+`">Probe ausführen</button>
+                        </div>
+                    </div>
+                `;
+                ChatMessage.create({
+                    content: messageContent
+                });
+
+                $(document).on("click", ".gorthian-inbound-roll-"+timestamp, function () { 
+                    console.log(skill_value + " " + attribute_value + " " + difficulty_value);
+                    game.torgeternity.rollSkillMacro(skill_value, attribute_value, false, difficulty_value); 
+                });        
             }
         }},
     default:'yes',
