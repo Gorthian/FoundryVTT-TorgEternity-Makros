@@ -1,32 +1,33 @@
 /*
-	Autor		    : Gorthian
+	Autor		: Gorthian
+	Voraussetzung	: Modul "Requestor" von Zhell
 */
 
 new Dialog({
     title:'Probe anfordern',
     content:`
-	    <script>
-            /* Funktion zum Setzen des Standardattributs für die gewählte Fähigkeit */
-	        function skillChanged(skill) {
-		        if (["energyWeapons","fireCombat","meleeWeapons","missileWeapons","heavyWeapons","unarmedCombat","dodge","stealth","landVehicles","airVehicles","beastRiding","lockpicking","waterVehicles"].includes(skill)) {
-			        attribute = "dexterity";
-		        } else if (["intimidation","apportation","conjuration","faith","kinesis","reality","willpower"].includes(skill)) {
-			        attribute = "spirit";
-		        } else if (["trick","profession","evidenceAnalysis","computers","firstAid","find","scholar","medicine","precognition","language","tracking","survival","alteration","divination","science"].includes(skill)) {
-			        attribute = "mind";
-		        } else if (["taunt","streetwise","telepathy","persuasion"].includes(skill)) {
-			        attribute = "charisma";
-		        } else {
-			        attribute = "strength";
-		        }
-		        document.getElementById('attribute').value = attribute; 
-	        }
-	    </script>
-	    <form>
+	<script>
+	function skillChanged(skill) {
+		if (["energyWeapons","fireCombat","meleeWeapons","missileWeapons","heavyWeapons","unarmedCombat","dodge","stealth","landVehicles","airVehicles","beastRiding","lockpicking","waterVehicles"].includes(skill)) {
+			attribute = "dexterity";
+		} else if (["intimidation","apportation","conjuration","faith","kinesis","reality","willpower"].includes(skill)) {
+			attribute = "spirit";
+		} else if (["trick","profession","evidenceAnalysis","computers","firstAid","find","scholar","medicine","precognition","language","tracking","survival","alteration","divination","science"].includes(skill)) {
+			attribute = "mind";
+		} else if (["taunt","streetwise","telepathy","persuasion"].includes(skill)) {
+			attribute = "charisma";
+		} else {
+			attribute = "strength";
+		}
+		
+		document.getElementById('attribute').value = attribute;
+	}
+	</script>
+	<form>
             <div class="form-group">
                 <label>Fertigkeit</label>
                 <select name="skill" id="skill" onChange="skillChanged(this.value);">
-		            <option value="">--- ANDERE ---</option>
+		    <option value="">--- ANDERE ---</option>
                     <option value="apportation">Apportation</option>
                     <option value="dodge">Ausweichen</option>
                     <option value="profession">Beruf</option>
@@ -70,8 +71,8 @@ new Dialog({
                     <option value="trick">Tricksen</option>
                     <option value="taunt">Verspotten</option>                    
                 </select>
-	        </div><div class="form-group">
-		        <label>Attribute</label>
+	</div><div class="form-group">
+		<label>Attribute</label>
                 <select name="attribute" id="attribute">
                     <option value="charisma">Charisma</option>
                     <option value="dexterity">Geschicklichkeit</option>
@@ -79,7 +80,7 @@ new Dialog({
                     <option value="spirit">Geist</option>
                     <option value="strength">Stärke</option>
                 </select>
-	        </div><div class="form-group">
+	</div><div class="form-group">
                 <label>Schwierigkeit</label>
                 <select name="difficulty" id="difficulty">
                     <option value="veryEasy">Sehr leicht</option>
@@ -91,42 +92,39 @@ new Dialog({
                     <option value="heroic">Heldenhaft</option>
                     <option value="nearImpossible">Fast Unmöglich</option>
                 </select>
-	        </div>
-        </form>`,
+	</div>
+</form>`,
     buttons:{
         yes: {
             icon: "<i class='fas fa-check'></i>",
             label: `Probe anfordern`,
             callback: () => {
-		        var skill = document.getElementById('skill');
-		        var skill_value = skill.value;
-		        var skill_text = skill.options[skill.selectedIndex].text;
-		        var attribute = document.getElementById('attribute');
-		        var attribute_value = attribute.value;
-		        var attribute_text = attribute.options[attribute.selectedIndex].text;
-		        var difficulty = document.getElementById('difficulty');
-		        var difficulty_value = difficulty.value;
-		        var difficulty_text = difficulty.options[difficulty.selectedIndex].text;
-                var timestamp = Date.now();
-
-                messageContent=`
-                    <div>
-                        <p><h1>Probe anfordern</h1></p>
-                        <p>Fertigkeit: `+skill_text+` (`+attribute_text+`) 
-                        <br/> Schwierigkeit: `+difficulty_text+`</p>
-                        <div class="buttons">
-                            <button class="gorthian-inbound-roll-`+timestamp+`">Probe ausführen</button>
-                        </div>
-                    </div>
-                `;
-                ChatMessage.create({
-                    content: messageContent
-                });
-
-                $(document).on("click", ".gorthian-inbound-roll-"+timestamp, function () { 
-                    console.log(skill_value + " " + attribute_value + " " + difficulty_value);
-                    game.torgeternity.rollSkillMacro(skill_value, attribute_value, false, difficulty_value); 
-                });        
+		var skill = document.getElementById('skill');
+		var skill_value = skill.value;
+		var skill_text = skill.options[skill.selectedIndex].text;
+		var attribute = document.getElementById('attribute');
+		var attribute_value = attribute.value;
+		var attribute_text = attribute.options[attribute.selectedIndex].text;
+		var difficulty = document.getElementById('difficulty');
+		var difficulty_value = difficulty.value;
+		var difficulty_text = difficulty.options[difficulty.selectedIndex].text;
+		Requestor.request({
+			img:"icons/svg/d20.svg",
+			title:"Probe angefordert",
+			description: skill_text+" ("+attribute_text+") <br/> Schwierigkeit: "+difficulty_text,
+			buttonData: [{
+				scope: {
+					skill: skill_value,
+					attribute: attribute_value,
+					difficulty: difficulty_value
+				},
+				label: "Probe ausführen",
+				command: async function(){
+					console.log(skill + " " +attribute+ " " + difficulty);
+      					return game.torgeternity.rollSkillMacro(skill, attribute, false, difficulty);
+   				}
+  			}]
+		});
             }
         }},
     default:'yes',
