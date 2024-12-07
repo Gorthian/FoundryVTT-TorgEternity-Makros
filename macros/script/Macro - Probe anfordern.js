@@ -6,28 +6,28 @@
 new Dialog({
     title:'Probe anfordern',
     content:`
-	<script>
-	function skillChanged(skill) {
-		if (["energyWeapons","fireCombat","meleeWeapons","missileWeapons","heavyWeapons","unarmedCombat","dodge","stealth","landVehicles","airVehicles","beastRiding","lockpicking","waterVehicles"].includes(skill)) {
-			attribute = "dexterity";
-		} else if (["intimidation","apportation","conjuration","faith","kinesis","reality","willpower"].includes(skill)) {
-			attribute = "spirit";
-		} else if (["trick","profession","evidenceAnalysis","computers","firstAid","find","scholar","medicine","precognition","language","tracking","survival","alteration","divination","science"].includes(skill)) {
-			attribute = "mind";
-		} else if (["taunt","streetwise","telepathy","persuasion"].includes(skill)) {
-			attribute = "charisma";
-		} else {
-			attribute = "strength";
-		}
-		
-		document.getElementById('attribute').value = attribute;
-	}
-	</script>
-	<form>
+        <script>
+        function skillChanged(skill) {
+            if (["energyWeapons","fireCombat","meleeWeapons","missileWeapons","heavyWeapons","unarmedCombat","dodge","stealth","landVehicles","airVehicles","beastRiding","lockpicking","waterVehicles"].includes(skill)) {
+                attribute = "dexterity";
+            } else if (["intimidation","apportation","conjuration","faith","kinesis","reality","willpower"].includes(skill)) {
+                attribute = "spirit";
+            } else if (["trick","profession","evidenceAnalysis","computers","firstAid","find","scholar","medicine","precognition","language","tracking","survival","alteration","divination","science"].includes(skill)) {
+                attribute = "mind";
+            } else if (["taunt","streetwise","telepathy","persuasion"].includes(skill)) {
+                attribute = "charisma";
+            } else {
+                attribute = "strength";
+            }
+            
+            document.getElementById('attribute').value = attribute;
+        }
+        </script>
+        <form>
             <div class="form-group">
                 <label>Fertigkeit</label>
                 <select name="skill" id="skill" onChange="skillChanged(this.value);">
-		    <option value="">--- ANDERE ---</option>
+		            <option value="">--- ANDERE ---</option>
                     <option value="apportation">Apportation</option>
                     <option value="dodge">Ausweichen</option>
                     <option value="profession">Beruf</option>
@@ -71,8 +71,9 @@ new Dialog({
                     <option value="trick">Tricksen</option>
                     <option value="taunt">Verspotten</option>                    
                 </select>
-	</div><div class="form-group">
-		<label>Attribute</label>
+	        </div>
+            <div class="form-group">
+		        <label>Attribute</label>
                 <select name="attribute" id="attribute">
                     <option value="charisma">Charisma</option>
                     <option value="dexterity">Geschicklichkeit</option>
@@ -80,7 +81,9 @@ new Dialog({
                     <option value="spirit">Geist</option>
                     <option value="strength">Stärke</option>
                 </select>
-	</div><div class="form-group">
+	        </div>
+            <!-- Ausgeblendet, da die Schwierigkeit derzeit nicht ausgewertet werden kann //-->
+            <div class="form-group" style="visibility:hidden;display:none;">
                 <label>Schwierigkeit</label>
                 <select name="difficulty" id="difficulty">
                     <option value="veryEasy">Sehr leicht</option>
@@ -92,8 +95,8 @@ new Dialog({
                     <option value="heroic">Heldenhaft</option>
                     <option value="nearImpossible">Fast Unmöglich</option>
                 </select>
-	</div>
-</form>`,
+	        </div>            
+        </form>`,
     buttons:{
         yes: {
             icon: "<i class='fas fa-check'></i>",
