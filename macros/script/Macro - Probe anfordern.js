@@ -111,7 +111,7 @@ new Dialog({
 		var difficulty = document.getElementById('difficulty');
 		var difficulty_value = difficulty.value;
 		var difficulty_text = difficulty.options[difficulty.selectedIndex].text;
-		Requestor.request({
+		await Requestor.request({
 			img:"icons/svg/d20.svg",
 			title:"Probe angefordert",
 			description: skill_text+" ("+attribute_text+") <br/> Schwierigkeit: "+difficulty_text,
